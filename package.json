@@ -1,0 +1,26 @@
+{
+  "name": "suggestions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:devcord/suggestions.git",
+  "author": "Austin M. <austin@austinmccalley.com>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.6",
+    "eslint": "^7.1.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.9.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint" : "eslint --ext .js,.jsx,.ts,.tsx ./src/",
+    "dev": "ts-node-dev src/index.ts"
+  }
+}
