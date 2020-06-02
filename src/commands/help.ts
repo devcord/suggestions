@@ -8,7 +8,7 @@ export class HelpCommand implements Command {
 
   private commands: Command[];
 
-  private embed_builder: EmbedBuilder;
+  readonly embed_builder: EmbedBuilder;
 
   constructor(commands: Command[]) {
     this.commands = commands;
