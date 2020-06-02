@@ -22,7 +22,7 @@ export class HelpCommand implements Command {
       // No command specified, give the user a list of all commands they can use.
       const commandNames = allowedCommands.map(command => command.commandNames[0]);
 
-     const embed = await this.embed_builder.buildEmbed('Help', `Here is a list of commands you can run: \n - ${commandNames.join("\n - ")} \nTry ${config.prefix}help ${commandNames[0]} to learn more about one of them.`, 12390624, commandContext.originalMessage.author);
+     const embed = await this.embed_builder.buildEmbed('Help', `Here is a list of commands you can run: \n - ${commandNames.join("\n - ")} \nTry ${config.prefix}help [command_name] to learn more about one of them.`, 12390624, commandContext.originalMessage.author);
 
       await commandContext.originalMessage.channel.send(embed);
       return;

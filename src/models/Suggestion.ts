@@ -18,13 +18,15 @@ export type SuggestionDocument = MONGOOSE.Document & {
 
 
 const suggestionSchema = new MONGOOSE.Schema({
-  suggestor: { Type: String, Required: true },
-  description: { Type: String, Required: true },
-  title: { Type: String, Required: true },
+  suggestor: { Type: String, required: true },
+  description: { Type: String, required: true },
+  title: { Type: String, required: true },
   up: { Type: Number, default: 0 },
   down: { Type: Number, default: 0 },
   date: { Type: Date, default: Date.now },
-  status: { Type: SuggestionStatus, Required: true },
+  status: { Type: SuggestionStatus, required: true },
 });
 
 const Suggestion = MONGOOSE.model<SuggestionDocument>('Suggestion', suggestionSchema);
+
+export default Suggestion;

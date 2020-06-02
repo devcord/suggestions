@@ -6,6 +6,7 @@ import { BotConfig } from "../config/config";
 
 /* Command Imports */
 import { HelpCommand } from "../commands/help";
+import { SetupCommand } from "../commands/setup";
 
 
 export class CommandHandler {
@@ -15,6 +16,7 @@ export class CommandHandler {
 
   constructor(config: BotConfig) {
     const commandClasses = [
+      SetupCommand,
       /* Commands go here */
     ]
 

@@ -15,22 +15,22 @@ class Bot {
     this.config = config;
   }
 
-protected validateConfig(config: BotConfig) {
+  protected validateConfig(config: BotConfig): void {
   if (!config.token) {
     throw new Error("You need to specify a bot token!");
   }
 }
   
-  protected initializeCommandHandler() {
+  protected initializeCommandHandler(): void {
     this.commandHandler = new CommandHandler(this.config);
   }
 
-  protected initializeMongo() {
+  protected initializeMongo(): void {
     this.mongo = new Mongo(this.config);
     this.mongo.connect();
   }
 
-  protected initializeClient() {
+  protected initializeClient(): void {
     this.client = new Discord.Client();
   
 
@@ -50,16 +50,11 @@ protected validateConfig(config: BotConfig) {
     );
   }
 
-  public run() {
-
+  public run(): void {
     this.validateConfig(this.config);
     this.initializeCommandHandler();
     this.initializeMongo();
     this.initializeClient();
-
-
-
-
     this.client.login(config.token);
 }
 }
