@@ -1,7 +1,7 @@
 import MONGOOSE from 'mongoose';
 import { BotConfig } from "../config/config";
 
-export class Mongo {
+export default class Mongo {
   /* Attributes */
   private readonly uri: string;
 
@@ -23,7 +23,4 @@ export class Mongo {
       process.exit(1);
     })
   }
-
-
-
 }
