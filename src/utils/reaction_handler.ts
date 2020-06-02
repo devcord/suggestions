@@ -10,7 +10,7 @@ import { SetupCommand } from "../commands/setup";
 import { SuggestCommand } from "../commands/suggest";
 
 
-export class CommandHandler {
+export class ReactionHandler {
   private commands: Command[];
   private readonly prefix: string;
 
@@ -23,7 +23,7 @@ export class CommandHandler {
     /* Map commands to array and add help command */
     this.commands = commandClasses.map(commandClass => new commandClass());
     this.commands.push(new HelpCommand(this.commands));
-  
+
     /* Initialize prefix */
     this.prefix = config.prefix;
   }
@@ -42,7 +42,7 @@ export class CommandHandler {
     if (!allowedCommands.includes(matchedCommand)) {
       await message.reply(`You are not allowed to use that command!`);
       await reactor.failure(message);
-    } else if(matchedCommand) {
+    } else if (matchedCommand) {
       await matchedCommand.run(commandContext).catch((err) => {
         console.error(err);
         reactor.failure(message);

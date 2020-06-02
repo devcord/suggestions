@@ -3,6 +3,7 @@ import { SuggestionStatus } from "../types/SuggestionStatus";
 import { Mongoose_SuggestionStatusType } from "./model_types/SuggestionStatus";
 
 
+// @ts-ignore
 MONGOOSE.Schema.Types.SuggestionStatus = Mongoose_SuggestionStatusType;
 
 export type SuggestionDocument = MONGOOSE.Document & {
@@ -18,13 +19,13 @@ export type SuggestionDocument = MONGOOSE.Document & {
 
 
 const suggestionSchema = new MONGOOSE.Schema({
-  suggestor: { Type: String, required: true },
-  description: { Type: String, required: true },
-  title: { Type: String, required: true },
-  up: { Type: Number, default: 0 },
-  down: { Type: Number, default: 0 },
-  date: { Type: Date, default: Date.now },
-  status: { Type: SuggestionStatus, required: true },
+  suggestor: { type: String, required: true },
+  description: { type: String, required: true },
+  title: { type: String, required: true },
+  up: { type: Number, default: 0 },
+  down: { type: Number, default: 0 },
+  date: { type: Date, default: Date.now },
+  status: { type: SuggestionStatus, default: SuggestionStatus.POSTED },
 });
 
 const Suggestion = MONGOOSE.model<SuggestionDocument>('Suggestion', suggestionSchema);

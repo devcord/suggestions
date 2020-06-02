@@ -12,6 +12,9 @@ export type embedType = {
   }
 }
 
+type fieldObjectType = {
+  name: string, value: string,
+};
 
 
 export class EmbedBuilder {
@@ -24,7 +27,7 @@ export class EmbedBuilder {
     // NOTHING
   }
 
-  async buildEmbed(title: string, description: string, color: number, author: User): Promise<embedType>{
+  async buildEmbed(title: string, description: string, color: number, author: User, fields?: fieldObjectType[]): Promise<embedType>{
     this.title = title;
     this.description = description;
     this.color = color;
@@ -36,12 +39,11 @@ export class EmbedBuilder {
         "author": {
           "name": author.tag,
           "icon_url": author.avatarURL(),
-        }
+        },
+        "fields": fields
       }
     };
 
     return embed;
-
-
   }
 }

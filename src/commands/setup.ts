@@ -3,11 +3,12 @@ import { CommandContext } from "../models/command_context";
 import { config } from "../config/config";
 import { EmbedBuilder } from "../utils/embed_builder";
 import { GuildMember, Role, Collection } from "discord.js";
-import Settings, {SettingsDocument} from "../models/Settings"
+import Settings, { SettingsDocument } from "../models/Settings";
+import Suggestion, { SuggestionDocument } from "../models/Suggestion";
 import { reactor } from "../reactions/reactor";
 
 export class SetupCommand implements Command {
-  readonly commandNames = ["setup", "s"];
+  readonly commandNames = ["setup"];
   readonly embed_builder: EmbedBuilder;
 
   constructor() {
