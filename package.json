@@ -7,9 +7,11 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.16"
   },
   "devDependencies": {
+    "@types/mongoose": "^5.7.21",
     "@types/node": "^14.0.6",
     "@types/ws": "^7.2.4",
     "@typescript-eslint/eslint-plugin": "^3.0.2",

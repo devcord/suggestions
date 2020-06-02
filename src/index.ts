@@ -1,6 +1,7 @@
 import Discord, { Message } from "discord.js";
 import { config, BotConfig } from './config/config';
 import { CommandHandler } from './utils/command_handler';
+import  {Mongo}  from "./utils/mongo_handler";
 
 function validateConfig(config: BotConfig) {
   if (!config.token) {
@@ -11,6 +12,8 @@ function validateConfig(config: BotConfig) {
 validateConfig(config);
 
 const commandHandler = new CommandHandler(config);
+const mongo = new Mongo(config);
+mongo.connect();
 
 const client = new Discord.Client();
 
