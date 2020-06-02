@@ -1,7 +1,7 @@
 import { Message, MessageReaction } from "discord.js";
 
-const POSITIVE = ["👍", "🎮", "💚", "🍜"];
-const FAILURE = ["⛔", ":X:"];
+const POSITIVE = ["👍", "✔️", "✅", "☑️"];
+const FAILURE = ["⛔", "❌"];
 
 export class Reactor {
   enableReactions: boolean;
