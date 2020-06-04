@@ -38,8 +38,7 @@ export class CommandHandler {
     const allowedCommands = this.commands.filter(command => command.hasPermissionToRun(commandContext));
     const matchedCommand = this.commands.find(command => command.commandNames.includes(commandContext.parsedCommandName));
 
-    // BUG: Check to see if command exists
-    if (!allowedCommands.includes(matchedCommand)) {
+    if (!allowedCommands.includes(matchedCommand) && this.commands.includes(matchedCommand)) {
       await message.reply(`You are not allowed to use that command!`);
       await reactor.failure(message);
     } else if(matchedCommand) {
@@ -50,7 +49,6 @@ export class CommandHandler {
     }
 
   }
-
 
   private isCommand(message: Message): boolean {
     return message.content.startsWith(this.prefix);

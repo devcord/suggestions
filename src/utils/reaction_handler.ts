@@ -1,59 +1,51 @@
-import { Message } from "discord.js";
-import { Command } from "../commands/command";
-import { CommandContext } from "../models/command_context";
-import { reactor } from "../reactions/reactor";
-import { BotConfig } from "../config/config";
-
-/* Command Imports */
-import { HelpCommand } from "../commands/help";
-import { SetupCommand } from "../commands/setup";
-import { SuggestCommand } from "../commands/suggest";
+import { Message, MessageReaction, User } from "discord.js";
+import Suggestion from "../models/Suggestion";
 
 
 export class ReactionHandler {
-  private commands: Command[];
-  private readonly prefix: string;
 
-  constructor(config: BotConfig) {
-    const commandClasses = [
-      SetupCommand,
-      SuggestCommand
-    ]
-
-    /* Map commands to array and add help command */
-    this.commands = commandClasses.map(commandClass => new commandClass());
-    this.commands.push(new HelpCommand(this.commands));
-
-    /* Initialize prefix */
-    this.prefix = config.prefix;
+  constructor() {
+    // Nothing
   }
 
-  async handleMessage(message: Message): Promise<void> {
-    if (message.author.bot || !this.isCommand(message)) {
-      return;
-    }
+  async handleReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
+    if (user.bot) return;
+    const message: Message = reaction.message;
+    this.addReaction(reaction.emoji.name, message);
+  }
 
-    const commandContext = new CommandContext(message, this.prefix);
+  async addReaction(reaction: string, message: Message): Promise<void> {
+    if (reaction === "👍🏻") {
+      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: 1 } }, (err, _) => {
+        if (err) throw new Error(err);
 
-    const allowedCommands = this.commands.filter(command => command.hasPermissionToRun(commandContext));
-    const matchedCommand = this.commands.find(command => command.commandNames.includes(commandContext.parsedCommandName));
-
-    // BUG: Check to see if command exists
-    if (!allowedCommands.includes(matchedCommand)) {
-      await message.reply(`You are not allowed to use that command!`);
-      await reactor.failure(message);
-    } else if (matchedCommand) {
-      await matchedCommand.run(commandContext).catch((err) => {
-        console.error(err);
-        reactor.failure(message);
+      });
+    } else if (reaction === "👎🏻") {
+      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: 1 } }, (err, _) => {
+        if (err) throw new Error(err);
+        
       });
     }
+  }
 
+  async handleReactionRemove(reaction: MessageReaction, user: User): Promise<void> {
+    if (user.bot) return;
+    const message: Message = reaction.message;
+    this.removeReaction(reaction.emoji.name, message);
   }
 
 
-  private isCommand(message: Message): boolean {
-    return message.content.startsWith(this.prefix);
-  }
+  async removeReaction(reaction: string, message: Message): Promise < void> {
+    if(reaction === "👍🏻") {
+    Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: -1 } }, (err, _) => {
+              if (err) throw new Error(err);
 
+    });
+  } else if (reaction === "👎🏻") {
+    Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: -1 } }, (err, _) => {
+              if (err) throw new Error(err);
+
+    });
+  }
+  }
 }

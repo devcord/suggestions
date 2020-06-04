@@ -27,6 +27,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src/",
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "ts-node-dev src/index.ts",
+    "serve": "node ./dist/index.js"
   }
 }

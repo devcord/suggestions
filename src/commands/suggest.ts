@@ -27,11 +27,12 @@ export class SuggestCommand implements Command {
       const suggestion = {
         suggestor: author.id,
         description: desc,
-        title: 'Suggestion #' + res.incValue
+        title: 'Suggestion #' + res.incValue,
+        message_id: '',
       };
+      suggestion.message_id = await this.createSuggestionEmbed(suggestion, guild);
 
       Suggestion.create(suggestion).then((suggestion) => {
-        this.createSuggestionEmbed(suggestion, guild);
 
         return suggestion;
       })
@@ -39,7 +40,7 @@ export class SuggestCommand implements Command {
     
   }
 
-  async createSuggestionEmbed(suggestion: SuggestionDocument, guild: Guild): Promise<void> {
+  async createSuggestionEmbed(suggestion: { suggestor: any; description: any; title: any; }, guild: Guild): Promise<string> {
     const settings = await Settings.findOne({ guild_id: guild.id });
     const suggestion_channel_id = settings.suggestion_channel;
 
@@ -54,6 +55,8 @@ export class SuggestCommand implements Command {
     // TODO: Customize these with setup
     await embed.react('👍🏻');
     await embed.react('👎🏻');
+
+    return embed.id;
   }
 
   async getSequenceNextValue(guild_id: string): Promise<SettingsDocument> {
