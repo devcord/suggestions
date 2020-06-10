@@ -6,6 +6,8 @@ import { GuildMember, Role, Collection } from "discord.js";
 import Settings, { SettingsDocument } from "../models/Settings";
 import Suggestion, { SuggestionDocument } from "../models/Suggestion";
 import { reactor } from "../reactions/reactor";
+import { Logger } from "winston";
+
 
 export class SetupCommand implements Command {
   readonly commandNames = ["setup"];
@@ -16,31 +18,43 @@ export class SetupCommand implements Command {
   }
 
 
-  async run(commandContext: CommandContext): Promise<void> {
+  async run(commandContext: CommandContext, logger: Logger): Promise<void> {
     const guild_id = commandContext.guild.id;
     let channel_id: string;
     if (commandContext.args.length === 0) {
+
       channel_id = commandContext.originalMessage.channel.id;     
       this.createSettings(guild_id, channel_id).then(async () => {
+
         const embed = await this.embed_builder.buildEmbed('Settings', `The settings have been updated to use <#${channel_id}> for posting suggestions`, 12390624, commandContext.author);
         commandContext.originalMessage.channel.send(embed);
-      }).catch(async () => {
+        
+        logger.info(`Settings configured for guild ${guild_id}`);
+      }).catch(async (err) => {
         // React bad
+        logger.error(err);
         await reactor.failure(commandContext.originalMessage);
       });
     } else {
       channel_id = commandContext.args[0].replace(/[^0-9]/g, '');
+      
       if (!commandContext.guild.channels.cache.map(channel => channel.id).includes(channel_id)) {
         const embed = await this.embed_builder.buildEmbed('Settings - Failure', `Channel id ${channel_id} does not exist in the guild!`, 12390624, commandContext.author);
         commandContext.originalMessage.channel.send(embed);
+     
       } else {
+       
         this.createSettings(guild_id, channel_id).then(async () => {
           const embed = await this.embed_builder.buildEmbed('Settings', `The settings have been updated to use <#${channel_id}> for posting suggestions`, 12390624, commandContext.author);
           commandContext.originalMessage.channel.send(embed);
-        }).catch(async () => {
+          logger.info(`Settings updated for guild ${guild_id}`);
+        }).catch(async (err) => {
           // React bad
+          logger.error(err);
+
           await reactor.failure(commandContext.originalMessage);
         });
+
       }
     }
   }

@@ -1,3 +1,5 @@
+import { Logger } from "winston";
+
 import { CommandContext } from "../models/command_context";
 import { EmbedBuilder } from "../utils/embed_builder";
 
@@ -7,7 +9,7 @@ export interface Command {
 
   getHelpMessage(commandPrefix: string): string;
 
-  run(parsedUserCommand: CommandContext): Promise<void>;
+  run(parsedUserCommand: CommandContext, logger: Logger): Promise<void>;
 
   hasPermissionToRun(parsedUserCommand: CommandContext): boolean;
 }

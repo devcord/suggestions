@@ -1,8 +1,12 @@
 import { Message } from "discord.js";
+import { Logger } from "winston";
+
 import { Command } from "../commands/command";
 import { CommandContext } from "../models/command_context";
 import { reactor } from "../reactions/reactor";
 import { BotConfig } from "../config/config";
+
+
 
 /* Command Imports */
 import { HelpCommand } from "../commands/help";
@@ -13,8 +17,9 @@ import { SuggestCommand } from "../commands/suggest";
 export class CommandHandler {
   private commands: Command[];
   private readonly prefix: string;
+  private readonly logger: Logger;
 
-  constructor(config: BotConfig) {
+  constructor(config: BotConfig, logger: Logger) {
     const commandClasses = [
       SetupCommand,
       SuggestCommand
@@ -26,6 +31,9 @@ export class CommandHandler {
   
     /* Initialize prefix */
     this.prefix = config.prefix;
+
+  /* Initialize logger */
+    this.logger = logger;
   }
 
   async handleMessage(message: Message): Promise<void> {
@@ -41,9 +49,9 @@ export class CommandHandler {
     if (!allowedCommands.includes(matchedCommand) && this.commands.includes(matchedCommand)) {
       await message.reply(`You are not allowed to use that command!`);
       await reactor.failure(message);
-    } else if(matchedCommand) {
-      await matchedCommand.run(commandContext).catch((err) => {
-        console.error(err);
+    } else if (matchedCommand) {
+      await matchedCommand.run(commandContext, this.logger).catch((err) => {
+        this.logger.error(err);
         reactor.failure(message);
       });
     }

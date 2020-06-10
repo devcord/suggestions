@@ -1,12 +1,15 @@
 import MONGOOSE from 'mongoose';
 import { BotConfig } from "../config/config";
+import winston from 'winston';
 
 export default class Mongo {
   /* Attributes */
   private readonly uri: string;
+  private readonly logger;
 
-  constructor(config: BotConfig) {
+  constructor(config: BotConfig, logger: winston.Logger) {
     this.uri = config.mongo_uri;
+    this.logger = logger;
   }
 
   public connect(): Promise<void> {
@@ -16,7 +19,7 @@ export default class Mongo {
       useCreateIndex: true,
       useFindAndModify: false,
     }).then(() => {
-      console.log(`Connected to MongoDb at ${this.uri}`);
+      this.logger.info(`Connected to MongoDB`);
       return;
     }).catch(err => {
       console.error(err);
