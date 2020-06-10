@@ -11,6 +11,7 @@ export type SuggestionDocument = MONGOOSE.Document & {
   description: string;
   title: string;
   message_id: string;
+  guild_id: string;
   up: number;
   down: number;
   date: Date;
@@ -23,7 +24,8 @@ const suggestionSchema = new MONGOOSE.Schema({
   suggestor: { type: String, required: true },
   description: { type: String, required: true },
   title: { type: String, required: true },
-  message_id: {type: String, required: true},
+  message_id: { type: String, required: true },
+  guild_id: { type: String, required: true },
   up: { type: Number, default: 0 },
   down: { type: Number, default: 0 },
   date: { type: Date, default: Date.now },

@@ -35,6 +35,7 @@ export class SuggestCommand implements Command {
         description: desc,
         title: 'Suggestion #' + res.incValue,
         message_id: '',
+        guild_id: guild.id,
       };
       suggestion.message_id = await this.createSuggestionEmbed(suggestion, guild);
 
