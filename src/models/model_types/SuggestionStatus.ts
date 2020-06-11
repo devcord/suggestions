@@ -6,8 +6,7 @@ export class Mongoose_SuggestionStatusType extends MONGOOSE.SchemaType {
     super(key, options, 'SuggestionStatus');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  cast(val: never) {
+  cast(val: never): unknown {
     if (!Object.values(SuggestionStatus).includes(val)) {
       throw new Error('SuggestionStatus: ' + val + ' is not a valid suggestion type.');
     } else {
