@@ -2,8 +2,6 @@ import MONGOOSE from "mongoose";
 import { SuggestionStatus } from "../types/SuggestionStatus";
 import { Mongoose_SuggestionStatusType } from "./model_types/SuggestionStatus";
 
-// TODO: Fix the typescript error
-// MONGOOSE.Schema.Types.SuggestionStatus = Mongoose_SuggestionStatusType;
 Object.defineProperty(MONGOOSE.Schema.Types, `SuggestionStatus`, {
   value: Mongoose_SuggestionStatusType
 });
