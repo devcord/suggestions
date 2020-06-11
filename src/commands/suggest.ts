@@ -4,6 +4,7 @@ import { EmbedBuilder } from "../utils/embed_builder";
 import { TextChannel, Guild, User } from "discord.js";
 import Settings, { SettingsDocument } from "../models/Settings"
 import Suggestion, { SuggestionDocument } from "../models/Suggestion";
+import { SuggestionStatus} from "../types/SuggestionStatus";
 import { reactor } from "../reactions/reactor";
 import { Logger } from "winston";
 
@@ -45,9 +46,9 @@ export class SuggestCommand implements Command {
       }).catch((error) => {
         this.logger.error(`There was an error creating suggestion ${res.incValue}. ${error}`);
       })
-      
+
     })
-    
+
   }
 
   async createSuggestionEmbed(suggestion: { suggestor: any; description: any; title: any; }, guild: Guild): Promise<string> {
@@ -56,10 +57,10 @@ export class SuggestCommand implements Command {
 
     const suggestion_channel = guild.channels.cache.find(channel => channel.id === suggestion_channel_id);
 
-    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggestor)).user);
+    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggestor)).user, [{ name: "Status", value: SuggestionStatus.POSTED }]);
 
     if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
-    
+
     const embed = await suggestion_channel.send(embedJSON);
 
     // TODO: Customize these with setup
@@ -71,7 +72,7 @@ export class SuggestCommand implements Command {
 
   async getSequenceNextValue(guild_id: string): Promise<SettingsDocument> {
     return Settings.findOneAndUpdate({ guild_id }, { $inc: { incValue: 1 } });
-}
+  }
 
   hasPermissionToRun(): boolean {
     return true;

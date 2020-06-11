@@ -14,6 +14,7 @@ export type SuggestionDocument = MONGOOSE.Document & {
   guild_id: string;
   up: number;
   down: number;
+  net: number;
   date: Date;
   status: SuggestionStatus;
 }
@@ -28,8 +29,17 @@ const suggestionSchema = new MONGOOSE.Schema({
   guild_id: { type: String, required: true },
   up: { type: Number, default: 0 },
   down: { type: Number, default: 0 },
+  net: { type: Number, default: 0},
   date: { type: Date, default: Date.now },
   status: { type: SuggestionStatus, default: SuggestionStatus.POSTED },
+});
+
+suggestionSchema.post('findOneAndUpdate', async function() {
+  const suggestion = await this.model.findOne(this.getQuery());
+  const net = suggestion.up - suggestion.down;
+  suggestion.net = net;
+
+  suggestion.save((err: any) => console.error);
 });
 
 const Suggestion = MONGOOSE.model<SuggestionDocument>('Suggestion', suggestionSchema);

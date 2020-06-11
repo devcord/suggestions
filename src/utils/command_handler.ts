@@ -10,8 +10,10 @@ import { BotConfig } from "../config/config";
 
 /* Command Imports */
 import { HelpCommand } from "../commands/help";
+import { PurgeCommand } from "../commands/purge";
 import { SetupCommand } from "../commands/setup";
 import { SuggestCommand } from "../commands/suggest";
+import { TopCommand } from "../commands/top";
 
 
 export class CommandHandler {
@@ -21,8 +23,10 @@ export class CommandHandler {
 
   constructor(config: BotConfig, logger: Logger) {
     const commandClasses = [
+      PurgeCommand,
       SetupCommand,
-      SuggestCommand
+      SuggestCommand, 
+      TopCommand
     ]
 
     /* Map commands to array and add help command */

@@ -16,15 +16,9 @@ export class ReactionHandler {
 
   async addReaction(reaction: string, message: Message): Promise<void> {
     if (reaction === "👍🏻") {
-      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: 1 } }, (err, _) => {
-        if (err) throw new Error(err);
-
-      });
+      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: 1 } }, (err: any ) => console.error);
     } else if (reaction === "👎🏻") {
-      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: 1 } }, (err, _) => {
-        if (err) throw new Error(err);
-        
-      });
+      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: 1 } }, (err: any) => console.error);
     }
   }
 
