@@ -1,13 +1,13 @@
 import MONGOOSE from 'mongoose';
 import { BotConfig } from "../config/config";
-import winston from 'winston';
+import { Logger } from 'winston';
 
 export default class Mongo {
   /* Attributes */
   private readonly uri: string;
-  private readonly logger;
+  private readonly logger: Logger;
 
-  constructor(config: BotConfig, logger: winston.Logger) {
+  constructor(config: BotConfig, logger: Logger) {
     this.uri = config.mongo_uri;
     this.logger = logger;
   }

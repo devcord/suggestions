@@ -2,7 +2,7 @@ import MONGOOSE from "mongoose";
 import { SuggestionStatus } from "../types/SuggestionStatus";
 import { Mongoose_SuggestionStatusType } from "./model_types/SuggestionStatus";
 
-// TODO: Fix this lint issue
+// TODO: Fix the typescript error
 MONGOOSE.Schema.Types.SuggestionStatus = Mongoose_SuggestionStatusType;
 
 export type SuggestionDocument = MONGOOSE.Document & {
