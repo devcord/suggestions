@@ -32,7 +32,7 @@ export class SuggestCommand implements Command {
       // TODO: Check if res is null, which means no settings were found
 
       const suggestion = {
-        suggestor: author.id,
+        suggester: author.id,
         description: desc,
         title: 'Suggestion #' + res.incValue,
         message_id: '',
@@ -51,13 +51,13 @@ export class SuggestCommand implements Command {
 
   }
 
-  async createSuggestionEmbed(suggestion: { suggestor: string; description: string; title: string; }, guild: Guild): Promise<string> {
+  async createSuggestionEmbed(suggestion: { suggester: string; description: string; title: string; }, guild: Guild): Promise<string> {
     const settings = await Settings.findOne({ guild_id: guild.id });
     const suggestion_channel_id = settings.suggestion_channel;
 
     const suggestion_channel = guild.channels.cache.find(channel => channel.id === suggestion_channel_id);
 
-    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggestor)).user, [{ name: "Status", value: SuggestionStatus.POSTED }]);
+    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggester)).user, [{ name: "Status", value: SuggestionStatus.POSTED }]);
 
     if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
 

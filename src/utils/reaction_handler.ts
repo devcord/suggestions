@@ -80,7 +80,7 @@ export class ReactionHandler {
     const suggestion_channel = guild.channels.cache.find(channel => channel.id === settings.suggestion_channel);
     if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
 
-    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 32768, (await guild.members.fetch(suggestion.suggestor)).user, [{ name: "Status", value: SuggestionStatus.ACCEPTED }]);
+    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 32768, (await guild.members.fetch(suggestion.suggester)).user, [{ name: "Status", value: SuggestionStatus.ACCEPTED }]);
 
     const msg = (await suggestion_channel.messages.fetch(suggestion.message_id)).edit(embedJSON);
     (await msg).reactions.removeAll();
@@ -94,7 +94,7 @@ export class ReactionHandler {
     const suggestion_channel = guild.channels.cache.find(channel => channel.id === settings.suggestion_channel);
     if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
 
-    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 16711680, (await guild.members.fetch(suggestion.suggestor)).user, [{ name: "Status", value: SuggestionStatus.DENIED }]);
+    const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 16711680, (await guild.members.fetch(suggestion.suggester)).user, [{ name: "Status", value: SuggestionStatus.DENIED }]);
 
     const msg = (await suggestion_channel.messages.fetch(suggestion.message_id)).edit(embedJSON);
     (await msg).reactions.removeAll();

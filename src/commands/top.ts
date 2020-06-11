@@ -36,7 +36,7 @@ export class TopCommand implements Command {
   async sendTopSuggestions(suggestions: SuggestionDocument[], message: Message): Promise<void> {
     let embedJson;
     suggestions.forEach(async suggestion => {
-      embedJson = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await message.guild.members.fetch(suggestion.suggestor)).user);
+      embedJson = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await message.guild.members.fetch(suggestion.suggester)).user);
       const embed = await message.channel.send(embedJson);
 
       await embed.react('❌');
@@ -67,7 +67,7 @@ export class TopCommand implements Command {
         status: SuggestionStatus.PENDING
       }, (err) => { if (err) throw new Error(err) });
 
-      const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggestor)).user, [{ name: "Status", value: SuggestionStatus.PENDING }]);
+      const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggester)).user, [{ name: "Status", value: SuggestionStatus.PENDING }]);
 
       if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
 

@@ -2,12 +2,17 @@ import MONGOOSE from "mongoose";
 import { SuggestionStatus } from "../types/SuggestionStatus";
 import { Mongoose_SuggestionStatusType } from "./model_types/SuggestionStatus";
 
-Object.defineProperty(MONGOOSE.Schema.Types, `SuggestionStatus`, {
-  value: Mongoose_SuggestionStatusType
-});
+declare module 'mongoose' {
+  namespace Schema {
+    namespace Types {
+      class Mongoose_SuggestionStatusType extends MONGOOSE.SchemaType {}
+    }
+  }
+}
+
 
 export type SuggestionDocument = MONGOOSE.Document & {
-  suggestor: string;
+  suggester: string;
   description: string;
   title: string;
   message_id: string;
@@ -19,10 +24,8 @@ export type SuggestionDocument = MONGOOSE.Document & {
   status: SuggestionStatus;
 }
 
-
-
 const suggestionSchema = new MONGOOSE.Schema({
-  suggestor: { type: String, required: true },
+  suggester: { type: String, required: true },
   description: { type: String, required: true },
   title: { type: String, required: true },
   message_id: { type: String, required: true },
