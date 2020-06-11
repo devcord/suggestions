@@ -18,11 +18,12 @@ export class PurgeCommand implements Command {
   }
 
 
-  async run(commandContext: CommandContext, _logger: Logger): Promise<void> {
+  async run(commandContext: CommandContext, logger: Logger): Promise<void> {
     const days = commandContext.args.length > 0 ? parseInt(commandContext.args[0]) : 7;
     this.deleteSuggestions(days, commandContext.originalMessage.guild).then(async () => {
       const embedJSON = await this.embed_builder.buildEmbed('Suggestion Purge', `Deleted all suggestions older than ${days} days old`, 12390624, commandContext.author);
       await commandContext.originalMessage.channel.send(embedJSON);
+      logger.info(`Purged suggestions older than ${days} in ${commandContext.originalMessage.guild.id}`);
     })
 
   }

@@ -40,7 +40,7 @@ class Bot {
   }
 
   protected initializeReactionsHandler(): void {
-    this.reactionHandler = new ReactionHandler();
+    this.reactionHandler = new ReactionHandler(this.logger);
   }
 
   protected initializeMongo(): void {

@@ -1,11 +1,13 @@
 import { Message, MessageReaction, User } from "discord.js";
 import Suggestion from "../models/Suggestion";
-
+import { SuggestionStatus } from "../types/SuggestionStatus";
+import { Logger } from "winston";
 
 export class ReactionHandler {
+  private logger: Logger;
 
-  constructor() {
-    // Nothing
+  constructor(logger: Logger) {
+    this.logger = logger;
   }
 
   async handleReactionAdd(reaction: MessageReaction, user: User): Promise<void> {
@@ -15,10 +17,17 @@ export class ReactionHandler {
   }
 
   async addReaction(reaction: string, message: Message): Promise<void> {
-    if (reaction === "👍🏻") {
-      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: 1 } }, (err: any ) => console.error);
-    } else if (reaction === "👎🏻") {
-      Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: 1 } }, (err: any) => console.error);
+    // Check if message exists
+    if ((await Suggestion.find({ message_id: message.id }).limit(1)).length > 0) {
+      if (reaction === "👍🏻") {
+        Suggestion.findOneAndUpdate({ message_id: message.id, status: SuggestionStatus.POSTED }, { $inc: { up: 1 } }, (err: string) => {
+         if(err) this.logger.error(err);
+        });
+      } else if (reaction === "👎🏻") {
+        Suggestion.findOneAndUpdate({ message_id: message.id, status: SuggestionStatus.POSTED }, { $inc: { down: 1 } }, (err: string) => {
+          if (err) this.logger.error(err);
+        });
+      }
     }
   }
 
@@ -30,15 +39,14 @@ export class ReactionHandler {
 
 
   async removeReaction(reaction: string, message: Message): Promise < void> {
-    if(reaction === "👍🏻") {
-    Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: -1 } }, (err, _) => {
-              if (err) throw new Error(err);
-
+    if (reaction === "👍🏻" && (await Suggestion.find({ message_id: message.id, status: SuggestionStatus.POSTED  }).limit(1)).length > 0) {
+      
+    Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { up: -1 } }, (err) => {
+      if (err) this.logger.error(err);
     });
-  } else if (reaction === "👎🏻") {
-    Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: -1 } }, (err, _) => {
-              if (err) throw new Error(err);
-
+    } else if (reaction === "👎🏻" && (await Suggestion.find({ message_id: message.id, status: SuggestionStatus.POSTED  }).limit(1)).length > 0) {
+    Suggestion.findOneAndUpdate({ message_id: message.id }, { $inc: { down: -1 } }, (err) => {
+      if (err) this.logger.error(err);
     });
   }
   }

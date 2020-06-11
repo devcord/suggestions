@@ -4,7 +4,6 @@ import { config } from "../config/config";
 import { EmbedBuilder } from "../utils/embed_builder";
 import { GuildMember, Role, Collection } from "discord.js";
 import Settings, { SettingsDocument } from "../models/Settings";
-import Suggestion, { SuggestionDocument } from "../models/Suggestion";
 import { reactor } from "../reactions/reactor";
 import { Logger } from "winston";
 

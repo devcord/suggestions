@@ -51,7 +51,7 @@ export class SuggestCommand implements Command {
 
   }
 
-  async createSuggestionEmbed(suggestion: { suggestor: any; description: any; title: any; }, guild: Guild): Promise<string> {
+  async createSuggestionEmbed(suggestion: { suggestor: string; description: string; title: string; }, guild: Guild): Promise<string> {
     const settings = await Settings.findOne({ guild_id: guild.id });
     const suggestion_channel_id = settings.suggestion_channel;
 
