@@ -26,15 +26,19 @@ class Bot {
   protected initializeLogger(): void {
     this.loggerHandler = new LoggerHandler();
     this.logger = this.loggerHandler.logger;
+
+    process.on('uncaughtException', (error) => {
+      this.logger.error("Uncaught Exception: ", error);
+    })
   }
 
   protected validateConfig(config: BotConfig): void {
     if (!config.token) {
       this.logger.error("You need to provide a bot token!");
       process.exit(1);
+    }
   }
-}
-  
+
   protected initializeCommandHandler(): void {
     this.commandHandler = new CommandHandler(this.config, this.logger);
   }
@@ -44,13 +48,13 @@ class Bot {
   }
 
   protected initializeMongo(): void {
-    this.mongo = new Mongo(this.config,this.logger);
+    this.mongo = new Mongo(this.config, this.logger);
     this.mongo.connect();
   }
 
   protected initializeClient(): void {
-    this.client = new Discord.Client({partials: this.partials});
-  
+    this.client = new Discord.Client({ partials: this.partials });
+
 
     this.client.on("ready", () => {
       this.logger.info(this.client.user.tag + " has been started!");
@@ -98,7 +102,7 @@ class Bot {
     this.initializeMongo();
     this.initializeClient();
     this.client.login(config.token);
-}
+  }
 }
 
 export default Bot;
