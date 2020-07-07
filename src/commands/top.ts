@@ -65,13 +65,19 @@ export class TopCommand implements Command {
       
       Suggestion.findOneAndUpdate({ _id: suggestion._id }, {
         status: SuggestionStatus.PENDING
-      }, (err) => { if (err) throw new Error(err) });
+      }, (err) => {
+        if (err) {
+          // Error getting the document
+      } });
 
       const embedJSON = await this.embed_builder.buildEmbed(suggestion.title, suggestion.description, 12390624, (await guild.members.fetch(suggestion.suggester)).user, [{ name: "Status", value: SuggestionStatus.PENDING }]);
 
       if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
 
-      (await suggestion_channel.messages.fetch(suggestion.message_id)).edit(embedJSON);
+      (await suggestion_channel.messages.fetch(suggestion.message_id)).edit(embedJSON).catch((err) => {
+        if (err) return
+        // Error editing the message
+      });
     })
   }
 
