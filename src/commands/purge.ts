@@ -1,7 +1,7 @@
 import { Command } from "./command";
 import { CommandContext } from "../models/command_context";
 import { EmbedBuilder } from "../utils/embed_builder";
-import { GuildMember, Collection, Role, Guild, TextChannel } from "discord.js";
+import { GuildMember, Collection, Role, Guild, TextChannel, GuildChannel } from "discord.js";
 import { config } from "../config/config";
 import { Logger } from "winston";
 import Settings from "../models/Settings";
@@ -31,7 +31,8 @@ export class PurgeCommand implements Command {
 
   async deleteSuggestions(days: number, guild: Guild): Promise<void> {
     const settings = await Settings.findOne({ guild_id: guild.id });
-    const suggestion_channel = guild.channels.cache.find(channel => channel.id === settings.suggestion_channel);
+    // const suggestion_channel = guild.channels.cache.find((channel: GuildChannel) => channel.id === settings.suggestion_channel);
+    const suggestion_channel = guild.channels.cache.get(settings.suggestion_channel)
     if (!((suggestion_channel): suggestion_channel is TextChannel => suggestion_channel.type === "text")(suggestion_channel)) return;
 
 
